@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CarImage extends Model
+class CarImage extends EloquentModel
 {
     use HasFactory;
 

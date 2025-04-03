@@ -6,9 +6,9 @@
     @include('layout.partials.footer')
 @endsection --}}
 
-@props(['title' => ''])
+@props(['title' => '', 'bodyClass' => null])
 
-<x-resource-layout :$title>
+<x-resource-layout :$title :$bodyClass>
     {{-- @include('layout.partials.header') --}}
     <x-layouts.header></x-layouts.header>
     {{ $slot }}

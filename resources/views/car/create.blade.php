@@ -9,11 +9,11 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Maker</label>
-                                    <select>
+                                    <select id="makerSelect">
                                         <option value="">Maker</option>
-                                        <option value="bmw">BMW</option>
-                                        <option value="lexus">Lexus</option>
-                                        <option value="mercedes">Mercedes</option>
+                                        @foreach ($makers as $maker)
+                                            <option value={{ $maker->id }}>{{ $maker->name }}</option>
+                                        @endforeach
                                     </select>
                                     <p class="error-message">This field is required</p>
                                 </div>
@@ -21,7 +21,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Model</label>
-                                    <select>
+                                    <select id='modelSelect'>
                                         <option value="">Model</option>
                                     </select>
                                 </div>
@@ -31,68 +31,28 @@
                                     <label>Year</label>
                                     <select>
                                         <option value="">Year</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2012">2012</option>
-                                        <option value="2011">2011</option>
-                                        <option value="2010">2010</option>
-                                        <option value="2009">2009</option>
-                                        <option value="2008">2008</option>
-                                        <option value="2007">2007</option>
-                                        <option value="2006">2006</option>
-                                        <option value="2005">2005</option>
-                                        <option value="2004">2004</option>
-                                        <option value="2003">2003</option>
-                                        <option value="2002">2002</option>
-                                        <option value="2001">2001</option>
-                                        <option value="2000">2000</option>
-                                        <option value="1999">1999</option>
-                                        <option value="1998">1998</option>
-                                        <option value="1997">1997</option>
-                                        <option value="1996">1996</option>
-                                        <option value="1995">1995</option>
-                                        <option value="1994">1994</option>
-                                        <option value="1993">1993</option>
-                                        <option value="1992">1992</option>
-                                        <option value="1991">1991</option>
-                                        <option value="1990">1990</option>
+                                        @php
+                                            $currentYear = date('Y');
+                                        @endphp
+                                        @for ($year = $currentYear; $year >= 1000; $year--)
+                                            <option value="{{ $year }}">{{ $year }}</option>
+                                        @endfor
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Car Type</label>
-                            <div class="row">
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="sedan" />
-                                        Sedan
-                                    </label>
-                                </div>
+                            <div class="row car-type-options">
+                                @foreach ($carTypes as $carType)
+                                    <div class="col">
+                                        <label class="inline-radio">
+                                            <input type="radio" name="car_type" value="{{ $carType->id }}" />
+                                            {{ $carType->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
 
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="hatchback" />
-                                        Hatchback
-                                    </label>
-                                </div>
-
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="suv" />
-                                        SUV (Sport Utility Vehicle)
-                                    </label>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -118,45 +78,33 @@
                         <div class="form-group">
                             <label>Fuel Type</label>
                             <div class="row">
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="gasoline" />
-                                        Gasoline
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="diesel" />
-                                        Diesel
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="electric" />
-                                        Electric
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="hybrid" />
-                                        Hybrid
-                                    </label>
-                                </div>
+                                @foreach ($fuelTypes as $fuelType)
+                                    <div class="col">
+                                        <label class="inline-radio">
+                                            <input type="radio" name="fuel_type" value="{{ $fuelType->id }}" />
+                                            {{ $fuelType->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label>State/Region</label>
-                                    <select>
+                                    <select id="stateSelect">
                                         <option value="">State/Region</option>
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <select>
+                                    <select id="citiesSelect">
                                         <option value="">City</option>
                                     </select>
                                 </div>
@@ -277,3 +225,57 @@
         </div>
     </main>
 </x-app-layout>
+
+<script>
+    $('#makerSelect').on('change', function() {
+        console.log(this.value);
+        const makerId = this.value;
+        $('#modelSelect').html('<option value=>Model</option>');
+        $.ajax({
+            url: "{{ route('car.models') }}",
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                value: makerId
+            },
+            success: function(response) {
+                console.log(response);
+                let html = "";
+                for (let i = 0; i < response.models.length; i++) {
+                    html +=
+                        `<option value=${response.models[i].id}>${response.models[i].name}</option>`;
+                }
+                $('#modelSelect').append(html);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+    })
+
+
+    $('#stateSelect').on('change', function() {
+        console.log(this.value);
+        const stateId = this.value;
+        $('#citiesSelect').html('<option value=>City</option>')
+        $.ajax({
+            url: "{{ route('car.cities') }}",
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                value: stateId
+            },
+            success: function(response) {
+                let html = "";
+                for (let i = 0; i < response.cities.length; i++) {
+                    html +=
+                        `<option value=${response.cities[i].id}>${response.cities[i].name}</option>`;
+                }
+                $('#citiesSelect').append(html);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+    })
+</script>

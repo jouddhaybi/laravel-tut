@@ -1028,6 +1028,13 @@ a.pagination-item:hover {
 .add-new-car-form .form-details {
     flex: 1;
 }
+.car-type-options {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 0.5rem;
+}
 
 .form-images {
     width: 280px;

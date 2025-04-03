@@ -76,6 +76,8 @@
     </section>
     <!--/ Home Slider -->
 
+
+
     <main>
         <!-- Find a car form -->
         <x-search-form />

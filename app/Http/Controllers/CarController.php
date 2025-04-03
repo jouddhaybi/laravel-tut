@@ -3,17 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\CarType;
+use App\Models\City;
+use App\Models\FuelType;
+use App\Models\Maker;
+use App\Models\Model;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $redirectTo = '/login';
+
     public function index()
     {
-        $cars = User::find(1)
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+
+        $authUser = auth()->user();
+        $authUserID = $authUser->id;
+        $cars = User::find($authUserID)
             ->cars()
             ->with(['primaryImage', 'maker', 'model'])
             ->orderBy("created_at", "desc")
@@ -31,7 +46,32 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('car.create');
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+        $makers = Maker::get();
+        $carTypes = CarType::get();
+        $fuelTypes = FuelType::get();
+        $states = State::get();
+        return view('car.create', [
+            'makers' => $makers,
+            'carTypes' => $carTypes,
+            'fuelTypes' => $fuelTypes,
+            'states' => $states
+        ]);
+    }
+
+    public function getModelsByMakersId(Request $request)
+    {
+        $makerId = $request->input('value');
+        $models = Model::select(['id', 'name'])->where('maker_id', $makerId)->get();
+        return response()->json(['models' => $models]);
+    }
+    public function getCitiesByStatesId(Request $request)
+    {
+        $stateId = $request->input('value');
+        $cities = City::select(['id', 'name'])->where('state_id', $stateId)->get();
+        return response()->json(['cities' => $cities]);
     }
 
     /**

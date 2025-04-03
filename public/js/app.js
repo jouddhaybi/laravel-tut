@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   const initSlider = () => {
     const slides = document.querySelectorAll(".hero-slide");
     let currentIndex = 0; // Track the current slide
@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!fileInput) {
       return;
     }
-    fileInput.onchange = (ev) => {
+    fileInput.onchange = ev => {
       imagePreview.innerHTML = "";
       const files = ev.target.files;
       for (let file of files) {
-        readFile(file).then((url) => {
+        readFile(file).then(url => {
           const img = createImage(url);
           imagePreview.append(img);
         });
@@ -69,10 +69,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function readFile(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (ev) => {
+        reader.onload = ev => {
           resolve(ev.target.result);
         };
-        reader.onerror = (ev) => {
+        reader.onerror = ev => {
           reject(ev);
         };
         reader.readAsDataURL(file);
@@ -98,76 +98,77 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const imageCarousel = () => {
-    const carousel = document.querySelector('.car-images-carousel');
+    const carousel = document.querySelector(".car-images-carousel");
     if (!carousel) {
       return;
     }
-    const thumbnails = document.querySelectorAll('.car-image-thumbnails img');
-    const activeImage = document.getElementById('activeImage');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-
+    const thumbnails = document.querySelectorAll(".car-image-thumbnails img");
+    const activeImage = document.getElementById("activeImage");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
 
     let currentIndex = 0;
 
     // Initialize active thumbnail class
     thumbnails.forEach((thumbnail, index) => {
       if (thumbnail.src === activeImage.src) {
-        thumbnail.classList.add('active-thumbnail');
+        thumbnail.classList.add("active-thumbnail");
         currentIndex = index;
       }
     });
 
     // Function to update the active image and thumbnail
-    const updateActiveImage = (index) => {
+    const updateActiveImage = index => {
       activeImage.src = thumbnails[index].src;
-      thumbnails.forEach(thumbnail => thumbnail.classList.remove('active-thumbnail'));
-      thumbnails[index].classList.add('active-thumbnail');
+      thumbnails.forEach(thumbnail =>
+        thumbnail.classList.remove("active-thumbnail")
+      );
+      thumbnails[index].classList.add("active-thumbnail");
     };
 
     // Add click event listeners to thumbnails
     thumbnails.forEach((thumbnail, index) => {
-      thumbnail.addEventListener('click', () => {
+      thumbnail.addEventListener("click", () => {
         currentIndex = index;
         updateActiveImage(currentIndex);
       });
     });
 
     // Add click event listener to the previous button
-    prevButton.addEventListener('click', () => {
+    prevButton.addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
       updateActiveImage(currentIndex);
     });
 
     // Add click event listener to the next button
-    nextButton.addEventListener('click', () => {
+    nextButton.addEventListener("click", () => {
       currentIndex = (currentIndex + 1) % thumbnails.length;
       updateActiveImage(currentIndex);
     });
-  }
+  };
 
   const initMobileFilters = () => {
-    const filterButton = document.querySelector('.show-filters-button');
-    const sidebar = document.querySelector('.search-cars-sidebar');
-    const closeButton = document.querySelector('.close-filters-button');
+    const filterButton = document.querySelector(".show-filters-button");
+    const sidebar = document.querySelector(".search-cars-sidebar");
+    const closeButton = document.querySelector(".close-filters-button");
 
     if (!filterButton) return;
 
-    console.log(filterButton.classList)
-    filterButton.addEventListener('click', () => {
-      if (sidebar.classList.contains('opened')) {
-        sidebar.classList.remove('opened')
+    console.log(filterButton.classList);
+    filterButton.addEventListener("click", () => {
+      if (sidebar.classList.contains("opened")) {
+        sidebar.classList.remove("opened");
       } else {
-        sidebar.classList.add('opened')
+        sidebar.classList.add("opened");
       }
     });
 
     if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        sidebar.classList.remove('opened')
-      })
+      closeButton.addEventListener("click", () => {
+        sidebar.classList.remove("opened");
+      });
     }
-  }
+  };
 
   const initCascadingDropdown = (parentSelector, childSelector) => {
     const parentDropdown = document.querySelector(parentSelector);
@@ -175,59 +176,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!parentDropdown || !childDropdown) return;
 
-    hideModelOptions(parentDropdown.value)
+    hideModelOptions(parentDropdown.value);
 
-    parentDropdown.addEventListener('change', (ev) => {
-      hideModelOptions(ev.target.value)
-      childDropdown.value = ''
+    parentDropdown.addEventListener("change", ev => {
+      hideModelOptions(ev.target.value);
+      childDropdown.value = "";
     });
 
     function hideModelOptions(parentValue) {
-      const models = childDropdown.querySelectorAll('option');
+      const models = childDropdown.querySelectorAll("option");
       models.forEach(model => {
-        if (model.dataset.parent === parentValue || model.value === '') {
-          model.style.display = 'block';
+        if (model.dataset.parent === parentValue || model.value === "") {
+          model.style.display = "block";
         } else {
-          model.style.display = 'none';
+          model.style.display = "none";
         }
       });
     }
-  }
+  };
 
   const initSortingDropdown = () => {
-    const sortingDropdown = document.querySelector('.sort-dropdown');
+    const sortingDropdown = document.querySelector(".sort-dropdown");
     if (!sortingDropdown) return;
 
     // Init sorting dropdown with the current value
     const url = new URL(window.location.href);
-    const sortValue = url.searchParams.get('sort');
+    const sortValue = url.searchParams.get("sort");
     if (sortValue) {
       sortingDropdown.value = sortValue;
     }
 
-    sortingDropdown.addEventListener('change', (ev) => {
+    sortingDropdown.addEventListener("change", ev => {
       const url = new URL(window.location.href);
-      url.searchParams.set('sort', ev.target.value);
+      url.searchParams.set("sort", ev.target.value);
       window.location.href = url.toString();
     });
-  }
+  };
 
   initSlider();
   initImagePicker();
   initMobileNavbar();
   imageCarousel();
   initMobileFilters();
-  initCascadingDropdown('#makerSelect', '#modelSelect');
-  initCascadingDropdown('#stateSelect', '#citySelect');
-  initSortingDropdown()
+  initCascadingDropdown("#makerSelect", "#modelSelect");
+  initCascadingDropdown("#stateSelect", "#citySelect");
+  initSortingDropdown();
 
   ScrollReveal().reveal(".hero-slide.active .hero-slider-title", {
     delay: 200,
-    reset: true,
+    reset: true
   });
   ScrollReveal().reveal(".hero-slide.active .hero-slider-content", {
     delay: 200,
     origin: "bottom",
-    distance: "50%",
+    distance: "50%"
   });
 });

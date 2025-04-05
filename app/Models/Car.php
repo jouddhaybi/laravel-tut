@@ -24,6 +24,7 @@ class Car extends EloquentModel
         'mileage',
         'car_type_id',
         'fuel_type_id',
+        'user_id',
         'city_id',
         'address',
         'phone',
@@ -75,7 +76,7 @@ class Car extends EloquentModel
 
     public function favoriteUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'favourite_cars', 'user_id');
+        return $this->belongsToMany(User::class, 'favourite_cars', 'car_id', 'user_id');
     }
 
     public function getCreateDate(): string

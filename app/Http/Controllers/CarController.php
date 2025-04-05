@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\CarFeatures;
+use App\Models\CarImage;
 use App\Models\CarType;
 use App\Models\City;
+use App\Models\favouriteCars;
 use App\Models\FuelType;
 use App\Models\Maker;
 use App\Models\Model;
@@ -20,14 +23,15 @@ class CarController extends Controller
      */
     protected $redirectTo = '/login';
 
+
     public function index()
     {
         if (!auth()->check()) {
             return redirect($this->redirectTo);
         }
-
         $authUser = auth()->user();
         $authUserID = $authUser->id;
+
         $cars = User::find($authUserID)
             ->cars()
             ->with(['primaryImage', 'maker', 'model'])
@@ -53,11 +57,14 @@ class CarController extends Controller
         $carTypes = CarType::get();
         $fuelTypes = FuelType::get();
         $states = State::get();
+        $carFeatures = CarFeatures::get();
+
         return view('car.create', [
             'makers' => $makers,
             'carTypes' => $carTypes,
             'fuelTypes' => $fuelTypes,
-            'states' => $states
+            'states' => $states,
+            'carFeatures' => $carFeatures
         ]);
     }
 
@@ -72,6 +79,90 @@ class CarController extends Controller
         $stateId = $request->input('value');
         $cities = City::select(['id', 'name'])->where('state_id', $stateId)->get();
         return response()->json(['cities' => $cities]);
+    }
+
+    public function createCar(Request $request)
+    {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+
+        $authUser = auth()->user();
+        $authUserID = $authUser->id;
+
+        try {
+            $published = $request->has('published') ? 1 : 0;
+            $published_at = $published ? now()->format('Y-m-d H:i:s') : null;
+
+
+            $data = [
+                'maker_id' => $request->input('maker'),
+                'model_id' => $request->input('model'),
+                'year' => $request->input('year'),
+                'price' => $request->input('price'),
+                'vin' => $request->input('vin'),
+                'mileage' => $request->input('mileage'),
+                'car_type_id' => $request->input('car_type'),
+                'fuel_type_id' => $request->input('fuel_type'),
+                'user_id' => $authUserID,
+                'city_id' => $request->input('city'),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+                'description' => $request->input('description'),
+                'published_at' => $published_at
+            ];
+
+            $newCar = Car::create($data);
+
+            if ($newCar) {
+                $features = [
+                    'car_id' => $newCar->id,
+                    'air_conditioning' => $request->has('air_conditioning'),
+                    'power_windows' => $request->has('power_windows'),
+                    'power_door_locks' => $request->has('power_door_locks'),
+                    'abs' => $request->has('abs'),
+                    'cruise_control' => $request->has('cruise_control'),
+                    'bluetooth_connectivity' => $request->has('bluetooth_connectivity'),
+                    'remote_start' => $request->has('remote_start'),
+                    'gps_navigation' => $request->has('gps_navigation'),
+                    'heated_seats' => $request->has('heated_seats'),
+                    'climate_control' => $request->has('climate_control'),
+                    'rear_parking_sensors' => $request->has('rear_parking_sensors'),
+                    'leather_seats' => $request->has('leather_seats'),
+                ];
+                CarFeatures::create($features);
+                if ($request->hasFile('images')) {
+                    $folderName = time() . '_' . $authUserID;
+                    $destinationPath = public_path("img/cars/{$folderName}");
+
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    $carImages = $request->file('images');
+                    if (!is_array($carImages)) {
+                        $carImages = [$carImages]; // wrap it into an array
+                    }
+
+                    foreach ($carImages as $image) {
+                        $fileName = time() . '_' . $image->getClientOriginalName();
+                        $image->move($destinationPath, $fileName);
+                        CarImage::create([
+                            'car_id' => $newCar->id,
+                            'image_path' => "cars/{$folderName}/{$fileName}",
+                            'position' => 1
+                        ]);
+                    }
+
+                }
+                return back()->with('success', 'Car Added Successfully!');
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -131,11 +222,39 @@ class CarController extends Controller
 
     public function watchlist()
     {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
         $cars = User::find(3)
             ->favoriteCars()
             ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
             ->paginate(15);
 
         return view('car.watchlist', ['cars' => $cars]);
+    }
+    public function addToWatchList(Request $request)
+    {
+        $authUser = auth()->user();
+        $authUserID = $authUser->id;
+
+        $carId = $request->input('value');
+
+        // dd($carId);
+
+        $favoriteCar = favouriteCars::where('user_id', $authUserID)->where('car_id', $carId);
+
+        if ($favoriteCar->exists()) {
+            $favoriteCar->delete();
+            return response()->json(['message' => 'Car Removed From WatchList!', 'status' => 200]);
+        } else {
+            $favoriteCar = new favouriteCars();
+            $favoriteCar->car_id = $carId;
+            $favoriteCar->user_id = $authUserID;
+            $favoriteCar->save();
+            return response()->json(['message' => 'Car Added To WatchList!', 'status' => 201]);
+        }
+        // return response()->json(['message' => $favoriteCar, 'status' => 201]);
+
+
     }
 }

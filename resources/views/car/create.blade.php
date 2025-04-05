@@ -1,15 +1,17 @@
-<x-app-layout>
+<x-app-layout title="Create">
     <main>
         <div class="container-small">
             <h1 class="car-details-page-title">Add new car</h1>
-            <form action="" method="POST" enctype="multipart/form-data" class="card add-new-car-form">
+            <form action="{{ route('car.newcreate') }}" method="POST" enctype="multipart/form-data"
+                class="card add-new-car-form">
+                @csrf
                 <div class="form-content">
                     <div class="form-details">
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label>Maker</label>
-                                    <select id="makerSelect">
+                                    <select id="makerSelect" name="maker">
                                         <option value="">Maker</option>
                                         @foreach ($makers as $maker)
                                             <option value={{ $maker->id }}>{{ $maker->name }}</option>
@@ -21,7 +23,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Model</label>
-                                    <select id='modelSelect'>
+                                    <select id='modelSelect' name="model">
                                         <option value="">Model</option>
                                     </select>
                                 </div>
@@ -29,7 +31,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Year</label>
-                                    <select>
+                                    <select name="year">
                                         <option value="">Year</option>
                                         @php
                                             $currentYear = date('Y');
@@ -59,19 +61,19 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Price</label>
-                                    <input type="number" placeholder="Price" />
+                                    <input name="price" type="number" placeholder="Price" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Vin Code</label>
-                                    <input placeholder="Vin Code" />
+                                    <input name="vin" placeholder="Vin Code" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Mileage (ml)</label>
-                                    <input placeholder="Mileage" />
+                                    <input name="mileage" placeholder="Mileage" />
                                 </div>
                             </div>
                         </div>
@@ -93,7 +95,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>State/Region</label>
-                                    <select id="stateSelect">
+                                    <select id="stateSelect" name="state">
                                         <option value="">State/Region</option>
                                         @foreach ($states as $state)
                                             <option value="{{ $state->id }}">{{ $state->name }}</option>
@@ -104,7 +106,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <select id="citiesSelect">
+                                    <select id="citiesSelect" name="city">
                                         <option value="">City</option>
                                     </select>
                                 </div>
@@ -114,16 +116,17 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input placeholder="Address" />
+                                    <input placeholder="Address" name="address" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Phone</label>
-                                    <input placeholder="Phone" />
+                                    <input placeholder="Phone" name="phone" />
                                 </div>
                             </div>
                         </div>
+                        {{-- @dd($carFeatures); --}}
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
@@ -192,7 +195,7 @@
                         </div>
                         <div class="form-group">
                             <label>Detailed Description</label>
-                            <textarea rows="10"></textarea>
+                            <textarea rows="10" name="description"></textarea>
                         </div>
                         <div class="form-group">
                             <label class="checkbox">
@@ -210,7 +213,7 @@
                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </div>
-                            <input id="carFormImageUpload" type="file" multiple />
+                            <input id="carFormImageUpload" type="file" name="images[]" multiple />
                         </div>
                         <div id="imagePreviews" class="car-form-images"></div>
                     </div>
@@ -227,55 +230,61 @@
 </x-app-layout>
 
 <script>
-    $('#makerSelect').on('change', function() {
-        console.log(this.value);
-        const makerId = this.value;
-        $('#modelSelect').html('<option value=>Model</option>');
-        $.ajax({
-            url: "{{ route('car.models') }}",
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                value: makerId
-            },
-            success: function(response) {
-                console.log(response);
-                let html = "";
-                for (let i = 0; i < response.models.length; i++) {
-                    html +=
-                        `<option value=${response.models[i].id}>${response.models[i].name}</option>`;
+    $(document).ready(function() {
+        @if (session('success'))
+            toastr.success('Car Added Successfully!');
+        @endif
+
+        $('#makerSelect').on('change', function() {
+            console.log(this.value);
+            const makerId = this.value;
+            $('#modelSelect').html('<option value=>Model</option>');
+            $.ajax({
+                url: "{{ route('car.models') }}",
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    value: makerId
+                },
+                success: function(response) {
+                    console.log(response);
+                    let html = "";
+                    for (let i = 0; i < response.models.length; i++) {
+                        html += `<option value=${response.models[i].id}>
+    ${response.models[i].name}</option>`;
+                    }
+                    $('#modelSelect').append(html);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
                 }
-                $('#modelSelect').append(html);
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
-            }
-        });
-    })
+            });
+        })
 
 
-    $('#stateSelect').on('change', function() {
-        console.log(this.value);
-        const stateId = this.value;
-        $('#citiesSelect').html('<option value=>City</option>')
-        $.ajax({
-            url: "{{ route('car.cities') }}",
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                value: stateId
-            },
-            success: function(response) {
-                let html = "";
-                for (let i = 0; i < response.cities.length; i++) {
-                    html +=
-                        `<option value=${response.cities[i].id}>${response.cities[i].name}</option>`;
+        $('#stateSelect').on('change', function() {
+            console.log(this.value);
+            const stateId = this.value;
+            $('#citiesSelect').html('<option value=>City</option>')
+            $.ajax({
+                url: "{{ route('car.cities') }}",
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    value: stateId
+                },
+                success: function(response) {
+                    let html = "";
+                    for (let i = 0; i < response.cities.length; i++) {
+                        html += `<option value=${response.cities[i].id}>
+                            ${response.cities[i].name}</option>`;
+                    }
+                    $('#citiesSelect').append(html);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
                 }
-                $('#citiesSelect').append(html);
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
-            }
-        });
+            });
+        })
     })
 </script>

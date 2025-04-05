@@ -11,6 +11,8 @@ Route::get("/", [HomeController::class, 'index'])->name('home');
 
 Route::post('car/get-models', [CarController::class, 'getModelsByMakersId'])->name('car.models');
 Route::post('car/get-cities', [CarController::class, 'getCitiesByStatesId'])->name('car.cities');
+Route::post('car/create', [CarController::class, 'createCar'])->name('car.newcreate');
+Route::post('car/add-watchlist', [CarController::class, 'addToWatchList'])->name('car.addwatchlist');
 
 
 Route::get('car/search', [CarController::class, 'search'])->name('car.search');

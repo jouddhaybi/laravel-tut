@@ -838,7 +838,7 @@ a.pagination-item:hover {
     overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
 }
 
 .car-active-image {
@@ -1311,9 +1311,9 @@ a.pagination-item:hover {
         flex-direction: column-reverse;
     }
 
-    .car-image-wrapper {
+    /* .car-image-wrapper {
         justify-content: center;
-    }
+    } */
 
     .car-image-thumbnails {
         display: none;

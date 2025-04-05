@@ -16,8 +16,20 @@
         <button class="btn btn-primary btn-login w-full">Login</button>
     </form>
 
+    {{-- @if ($errors->has('error'))
+        <div class="alert alert-danger">
+            {{ $errors->first('error') }}
+        </div>
+    @endif --}}
+
     <x-slot:formFooter>
         Don't have an account? -
-        <a href="/signup.html"> Click here to create one </a>
+        <a href="{{ route('signup') }}"> Click here to create one </a>
     </x-slot:formFooter>
 </x-guest-layout>
+
+<script>
+    @if ($errors->has('error'))
+        toastr.error('Invalid Credentials. Please Try Again.');
+    @endif
+</script>

@@ -12,6 +12,7 @@ class CarImage extends EloquentModel
 
     public $timestamps = false;
     protected $fillable = [
+        'car_id',
         'image_path',
         'position'
     ];

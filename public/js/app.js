@@ -89,13 +89,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-  const initMobileNavbar = () => {
-    const btnToggle = document.querySelector(".btn-navbar-toggle");
+  // const initMobileNavbar = () => {
+  //   const btnToggle = document.querySelector(".btn-navbar-toggle");
 
-    btnToggle.onclick = () => {
-      document.body.classList.toggle("navbar-opened");
-    };
-  };
+  //   btnToggle.onclick = () => {
+  //     document.body.classList.toggle("navbar-opened");
+  //   };
+  // };
 
   const imageCarousel = () => {
     const carousel = document.querySelector(".car-images-carousel");
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   initSlider();
   initImagePicker();
-  initMobileNavbar();
+  // initMobileNavbar();
   imageCarousel();
   initMobileFilters();
   initCascadingDropdown("#makerSelect", "#modelSelect");

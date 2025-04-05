@@ -117,15 +117,13 @@ document.addEventListener("DOMContentLoaded", function () {
       a.innerHTML = "\n        <img src=\"".concat(url, "\" />\n      ");
       return a;
     }
-  };
+  }; // const initMobileNavbar = () => {
+  //   const btnToggle = document.querySelector(".btn-navbar-toggle");
+  //   btnToggle.onclick = () => {
+  //     document.body.classList.toggle("navbar-opened");
+  //   };
+  // };
 
-  var initMobileNavbar = function initMobileNavbar() {
-    var btnToggle = document.querySelector(".btn-navbar-toggle");
-
-    btnToggle.onclick = function () {
-      document.body.classList.toggle("navbar-opened");
-    };
-  };
 
   var imageCarousel = function imageCarousel() {
     var carousel = document.querySelector(".car-images-carousel");
@@ -236,8 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   initSlider();
-  initImagePicker();
-  initMobileNavbar();
+  initImagePicker(); // initMobileNavbar();
+
   imageCarousel();
   initMobileFilters();
   initCascadingDropdown("#makerSelect", "#modelSelect");

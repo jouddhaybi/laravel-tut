@@ -222,15 +222,19 @@ class CarController extends Controller
 
     public function watchlist()
     {
-        if (!auth()->check()) {
+        if (auth()->check()) {
+            $authUser = auth()->user();
+            $authUserID = $authUser->id;
+            $cars = User::find($authUserID)
+                ->favoriteCars()
+                ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
+                ->paginate(15);
+
+            return view('car.watchlist', ['cars' => $cars]);
+        } else {
             return redirect($this->redirectTo);
         }
-        $cars = User::find(3)
-            ->favoriteCars()
-            ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
-            ->paginate(15);
 
-        return view('car.watchlist', ['cars' => $cars]);
     }
     public function addToWatchList(Request $request)
     {

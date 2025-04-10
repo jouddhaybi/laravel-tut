@@ -17,7 +17,10 @@ Route::post('car/add-watchlist', [CarController::class, 'addToWatchList'])->name
 
 Route::get('car/search', [CarController::class, 'search'])->name('car.search');
 Route::get('car/watchlist', [CarController::class, 'watchlist'])->name('car.watchlist');
-Route::resource('car', CarController::class);
+Route::get('car', [CarController::class, 'index'])->name('car.index');
+Route::resource('car', CarController::class)->names([
+    'index' => 'car.index',
+]);
 
 Route::get("/signup", [SignupController::class, 'create'])->name('signup');
 Route::post('/register', [SignupController::class, 'registerUser'])->name('register');

@@ -234,57 +234,5 @@
         @if (session('success'))
             toastr.success('Car Added Successfully!');
         @endif
-
-        $('#makerSelect').on('change', function() {
-            console.log(this.value);
-            const makerId = this.value;
-            $('#modelSelect').html('<option value=>Model</option>');
-            $.ajax({
-                url: "{{ route('car.models') }}",
-                type: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    value: makerId
-                },
-                success: function(response) {
-                    console.log(response);
-                    let html = "";
-                    for (let i = 0; i < response.models.length; i++) {
-                        html += `<option value=${response.models[i].id}>
-    ${response.models[i].name}</option>`;
-                    }
-                    $('#modelSelect').append(html);
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error);
-                }
-            });
-        })
-
-
-        $('#stateSelect').on('change', function() {
-            console.log(this.value);
-            const stateId = this.value;
-            $('#citiesSelect').html('<option value=>City</option>')
-            $.ajax({
-                url: "{{ route('car.cities') }}",
-                type: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    value: stateId
-                },
-                success: function(response) {
-                    let html = "";
-                    for (let i = 0; i < response.cities.length; i++) {
-                        html += `<option value=${response.cities[i].id}>
-                            ${response.cities[i].name}</option>`;
-                    }
-                    $('#citiesSelect').append(html);
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error);
-                }
-            });
-        })
     })
 </script>

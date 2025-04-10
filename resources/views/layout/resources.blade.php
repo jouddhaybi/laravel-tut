@@ -20,9 +20,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"
       rel="stylesheet"
     /> -->
-
-    <link rel="stylesheet" href="/css/app.css" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/toastr.css" />
+    <link rel="stylesheet" href="/css/app.css" />
     <!-- <link rel="stylesheet" href="css/output.css" /> -->
 </head>
 
@@ -35,8 +35,9 @@
         integrity="sha512-XJgPMFq31Ren4pKVQgeD+0JTDzn0IwS1802sc+QTZckE6rny7AN2HLReq6Yamwpd2hFe5nJJGZLvPStWFv5Kww=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/js/jquery.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
     <script src="/toastr/toastr.js"></script>
+    <script src="/js/app.js"></script>
 
 </body>
 

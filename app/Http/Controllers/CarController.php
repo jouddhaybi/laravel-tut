@@ -178,7 +178,9 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return view('car.show', ['car' => $car]);
+        return view('car.show', [
+            'car' => $car
+        ]);
     }
 
     /**
@@ -186,7 +188,25 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        return view('car.edit');
+        // dd($car);
+        $makers = Maker::get();
+        $carTypes = CarType::get();
+        $fuelTypes = FuelType::get();
+        $states = State::get();
+        $carFeatures = CarFeatures::where(['car_id' => $car->id])->first();
+
+        $carCity = City::where(['id' => $car->city_id])->first();
+        $carState = State::where(['id' => $carCity->state_id])->first();
+
+        return view('car.edit', [
+            'car' => $car,
+            'makers' => $makers,
+            'carTypes' => $carTypes,
+            'fuelTypes' => $fuelTypes,
+            'states' => $states,
+            'carState' => $carState,
+            'carFeatures' => $carFeatures
+        ]);
     }
 
     /**

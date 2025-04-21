@@ -1,12 +1,32 @@
 <x-app-layout>
     <main>
+        {{-- @dd($car->in_wishlist); --}}
         <div class="container">
             <h1 class="car-details-page-title">{{ $car->maker->name }} {{ $car->model->name }} - {{ $car->year }}</h1>
             <div class="car-details-region">{{ $car->city->name }} - {{ $car->published_at }}</div>
 
             <div class="car-details-content">
-                <div class="car-images-and-description">
-                    <div class="car-images-carousel">
+                <div class="car-images-and-description col-lg-9">
+                    <div class="swiper">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            @foreach ($car->images as $carImage)
+                                <div class="swiper-slide"> <img src="{{ asset('img/' . $carImage->image_path) }}"
+                                        alt=""></div>
+                            @endforeach
+                        </div>
+                        <!-- If we need pagination -->
+                        <div class="swiper-pagination"></div>
+
+                        <!-- If we need navigation buttons -->
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+
+                        <!-- If we need scrollbar -->
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+                    {{-- <div class="car-images-carousel">
                         <div class="car-image-wrapper">
                             <img src="{{ asset('img/' . $car->primaryImage?->image_path) }}" alt=""
                                 class="car-active-image" id="activeImage" />
@@ -28,7 +48,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </button>
-                    </div>
+                    </div> --}}
 
                     <div class="card car-detailed-description">
                         <h2 class="car-details-title">Detailed Description</h2>
@@ -81,19 +101,25 @@
                         </ul>
                     </div>
                 </div>
-                <div class="car-details card">
+                <div class="car-details card col-lg-3">
                     <div class="flex items-center justify-between">
                         <p class="car-details-price">${{ $car->price }}</p>
                         <button id="btnHeart" class="btn-heart text-primary" data-carid="{{ $car->id }}">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" style="width: 20px">
+                            <svg id="emptyHeart{{ $car->id }}" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px"
+                                @class([
+                                    'hidden' => $car->in_wishlist,
+                                ])>
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                             </svg>
 
-                            <svg id="filledHeart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                fill="currentColor" style="width: 16px">
+                            <svg id="filledHeart{{ $car->id }}" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="currentColor" style="width: 16px"
+                                @class([
+                                    'hidden' => !$car->in_wishlist,
+                                ])>
                                 <path
                                     d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
                             </svg>
@@ -162,3 +188,30 @@
         </div>
     </main>
 </x-app-layout>
+
+<script>
+    $(document).ready(function() {
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // And if we need scrollbar
+            // scrollbar: {
+            //     el: '.swiper-scrollbar',
+            // },
+        });
+
+    })
+</script>

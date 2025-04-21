@@ -22,6 +22,7 @@
     /> -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/toastr.css" />
+    <link rel="stylesheet" href="/swiper/swiper.min.css" />
     <link rel="stylesheet" href="/css/app.css" />
     <!-- <link rel="stylesheet" href="css/output.css" /> -->
 </head>
@@ -37,6 +38,7 @@
     <script src="/js/jquery.js"></script>
     <script src="/bootstrap/js/bootstrap.js"></script>
     <script src="/toastr/toastr.js"></script>
+    <script src="/swiper/swiper.min.js"></script>
     <script src="/js/app.js"></script>
 
 </body>

@@ -91,7 +91,13 @@
                     {{-- @dd($favoriteCars->first()) --}}
 
                     @foreach ($cars as $index => $car)
+                        {{-- @dump($car->favoriteUsers) --}}
+                        {{-- @foreach ($car->favoriteUsers as $carFavoriteUser) --}}
+                        {{-- @if ($carFavoriteUser->id == auth()->user()->id) --}}
                         <x-car-item :car="$car" />
+                        {{-- <x-car-item :car="$car" :isInWatchlist="@$carFavoriteUser->id == auth()->user()->id ? true : false" /> --}}
+                        {{-- @endif --}}
+                        {{-- @endforeach --}}
                     @endforeach ()
                 </div>
             </div>

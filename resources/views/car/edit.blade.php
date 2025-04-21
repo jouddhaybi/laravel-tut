@@ -1,9 +1,11 @@
 <x-app-layout title="Car Edit">
-    {{-- @dd($carFeatures); --}}
     <main>
         <div class="container-small">
             <h1 class="car-details-page-title">Add new car</h1>
-            <form action="" method="POST" enctype="multipart/form-data" class="card add-new-car-form">
+            <form action="{{ route('car.updatecar', $car->id) }}" method="POST" enctype="multipart/form-data"
+                class="card add-new-car-form">
+                @csrf
+                @method('PATCH')
                 <div class="form-content">
                     <div class="form-details">
                         <div class="row">
@@ -25,7 +27,7 @@
                                 <div class="form-group">
                                     <label>Model</label>
                                     <input type="hidden" name="" id="car_model" value="{{ $car->model_id }}">
-                                    <select id='modelSelect' name="modelEdit">
+                                    <select id='modelSelect' name="model">
                                         <option value="">Model</option>
 
                                     </select>
@@ -66,19 +68,20 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Price</label>
-                                    <input type="number" placeholder="Price" value="{{ $car->price }}" />
+                                    <input name="price" type="number" placeholder="Price"
+                                        value="{{ $car->price }}" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Vin Code</label>
-                                    <input placeholder="Vin Code" value="{{ $car->vin }}" />
+                                    <input name="vin" placeholder="Vin Code" value="{{ $car->vin }}" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Mileage (ml)</label>
-                                    <input placeholder="Mileage" value="{{ $car->mileage }}" />
+                                    <input name="mileage" placeholder="Mileage" value="{{ $car->mileage }}" />
                                 </div>
                             </div>
                         </div>
@@ -124,13 +127,13 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input placeholder="Address" value="{{ $car->address }}" />
+                                    <input placeholder="Address" name="address" value="{{ $car->address }}" />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label>Phone</label>
-                                    <input placeholder="Phone" value="{{ $car->phone }}" />
+                                    <input placeholder="Phone" name="phone" value="{{ $car->phone }}" />
                                 </div>
                             </div>
                         </div>
@@ -141,7 +144,7 @@
                                     @if ($column !== 'car_id')
                                         <div class="col col-lg-6">
                                             <label class="checkbox">
-                                                <input type="checkbox" name="air_conditioning"
+                                                <input type="checkbox" name="{{ $column }}"
                                                     value="{{ $value }}" {{ $value == 1 ? 'checked' : '' }} />
                                                 {{ $column }}
                                             </label>
@@ -153,7 +156,7 @@
                         </div>
                         <div class="form-group">
                             <label>Detailed Description</label>
-                            <textarea rows="10">
+                            <textarea rows="10" name="description">
                                 {{ $car->description }}
                             </textarea>
                         </div>
@@ -174,15 +177,28 @@
                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </div>
-                            <input id="carFormImageUpload" type="file" multiple />
+                            <input id="carFormImageUpload" name="images[]" type="file" multiple />
                         </div>
-                        <div id="imagePreviews" class="car-form-images"></div>
+                        <div id="imagePreviews" class="car-form-images">
+                            @foreach ($car->images as $images)
+                                <a href="#" class="car-form-image-preview">
+                                    <svg class="image-preview-edit-delete" xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-trash3-fill"
+                                        viewBox="0 0 16 16">
+                                        <path
+                                            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                                    </svg>
+                                    <img src="{{ asset('img/' . $images?->image_path) }}" alt="">
+                                </a>
+                            @endforeach
+
+                        </div>
                     </div>
                 </div>
                 <div class="p-medium" style="width: 100%">
                     <div class="flex justify-end gap-1">
                         <button type="button" class="btn btn-default">Reset</button>
-                        <button class="btn btn-primary">Submit</button>
+                        <button class="btn btn-primary">Edit</button>
                     </div>
                 </div>
             </form>
@@ -202,11 +218,15 @@
 
         const modelID = $('#car_model').val();
         const cityID = $('#car_city').val();
-        console.log(modelID);
 
         setTimeout(function() {
             $('#modelSelect').val(modelID);
             $('#citiesSelect').val(cityID);
         }, 1000);
+
+        @if (session('success'))
+            toastr.success('Car Edited Successfully!');
+        @endif
+
     })
 </script>

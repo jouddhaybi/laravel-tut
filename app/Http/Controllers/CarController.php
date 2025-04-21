@@ -32,6 +32,7 @@ class CarController extends Controller
         $authUser = auth()->user();
         $authUserID = $authUser->id;
 
+
         $cars = User::find($authUserID)
             ->cars()
             ->with(['primaryImage', 'maker', 'model'])
@@ -178,6 +179,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+
         return view('car.show', [
             'car' => $car
         ]);
@@ -214,6 +216,62 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
+
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+
+        try {
+            $authUser = auth()->user();
+            $authUserID = $authUser->id;
+
+            $published = $request->has('published') ? 1 : 0;
+            $hasDate = $car->published_at ? $car->published_at : now()->format('Y-m-d H:i:s');
+            $published_at = $published ? $hasDate : null;
+
+            $data = [
+                'maker_id' => $request->input('maker'),
+                'model_id' => $request->input('model'),
+                'year' => $request->input('year'),
+                'price' => $request->input('price'),
+                'vin' => $request->input('vin'),
+                'mileage' => $request->input('mileage'),
+                'car_type_id' => $request->input('car_type'),
+                'fuel_type_id' => $request->input('fuel_type'),
+                'user_id' => $authUserID,
+                'city_id' => $request->input('city'),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+                'description' => $request->input('description'),
+                'published_at' => $published_at
+            ];
+            $car->update($data);
+            $features = [
+                'car_id' => $car->id,
+                'air_conditioning' => $request->has('air_conditioning'),
+                'power_windows' => $request->has('power_windows'),
+                'power_door_locks' => $request->has('power_door_locks'),
+                'abs' => $request->has('abs'),
+                'cruise_control' => $request->has('cruise_control'),
+                'bluetooth_connectivity' => $request->has('bluetooth_connectivity'),
+                'remote_start' => $request->has('remote_start'),
+                'gps_navigation' => $request->has('gps_navigation'),
+                'heated_seats' => $request->has('heated_seats'),
+                'climate_control' => $request->has('climate_control'),
+                'rear_parking_sensors' => $request->has('rear_parking_sensors'),
+                'leather_seats' => $request->has('leather_seats'),
+            ];
+            $carFeatures = CarFeatures::findOrFail($car->id);
+            $carFeatures->update($features);
+            // dd($features);
+            return back()->with('success', 'Car Edited Successfully!');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
         //
     }
 
@@ -282,3 +340,6 @@ class CarController extends Controller
 
     }
 }
+
+
+

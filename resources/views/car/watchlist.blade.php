@@ -17,7 +17,7 @@
                 </div>
                 <div class="car-items-listing">
                     @foreach ($cars as $car)
-                        <x-car-item :car="$car" :isInWatchlist="true" />
+                        <x-car-item :car="$car" />
                     @endforeach
                 </div>
                 {{ $cars->onEachSide(1)->links() }}

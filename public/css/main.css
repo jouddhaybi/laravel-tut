@@ -1,0 +1,23 @@
+.car-details-page .car-images-and-description .car-details-swiper .swiper-wrapper .swiper-slide img {
+  width: 100%;
+}
+.car-details-page .car-images-and-description .car-details-swiper .swiper-pagination .swiper-pagination-bullet {
+  width: 70px;
+  background: none;
+  height: initial;
+  border: 1px solid #e9580c;
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: unset;
+}
+.car-details-page .car-images-and-description .car-details-swiper .swiper-pagination .swiper-pagination-bullet img {
+  width: 100%;
+}
+.car-details-page .car-images-and-description .car-details-swiper .swiper-pagination .swiper-pagination-bullet-active {
+  width: 100px;
+  border: 3px solid #e9580c;
+}
+
+.page-my-cars .table-responsive table tr .action-cell {
+  display: flex;
+}

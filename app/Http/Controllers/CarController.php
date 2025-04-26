@@ -221,6 +221,7 @@ class CarController extends Controller
             return redirect($this->redirectTo);
         }
 
+        // dd($request->input('city'));
         try {
             $authUser = auth()->user();
             $authUserID = $authUser->id;
@@ -280,7 +281,18 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        if ($car->delete()) {
+            favouriteCars::where('car_id', $car->id)->delete();
+            return back()->with([
+                'success' => 'Car Deleted Successfully!',
+                'deletedCarId' => $car->id,
+            ]);
+        }
+
+    }
+    public function images(Car $car)
+    {
+        return view('car.images', ['car' => $car]);
     }
 
     public function search()

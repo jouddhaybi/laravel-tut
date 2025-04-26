@@ -17,7 +17,7 @@
                             </thead>
                             <tbody>
                                 @forelse ($cars as $car)
-                                    <tr>
+                                    <tr id="car-row-{{ $car->id }}">
                                         <td>
                                             <img src="{{ asset('img/' . $car->primaryImage?->image_path) }}"
                                                 alt="" class="my-cars-img-thumbnail" />
@@ -25,7 +25,7 @@
                                         <td>{{ $car->year }} - {{ $car->maker->name }} {{ $car->model->name }}</td>
                                         <td>{{ $car->getCreateDate() }}</td>
                                         <td>{{ $car->published_at ? 'Yes' : 'No' }}</td>
-                                        <td class="">
+                                        <td class="action-cell">
                                             <a href="{{ route('car.edit', $car->id) }}"
                                                 class="btn btn-edit inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -37,7 +37,8 @@
 
                                                 edit
                                             </a>
-                                            <a href="car_images.html" class="btn btn-edit inline-flex items-center">
+                                            <a href="{{ route('car.images', ['car' => $car->id]) }}"
+                                                class="btn btn-edit inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     style="width: 12px; margin-right: 5px">
@@ -46,21 +47,26 @@
                                                 </svg>
                                                 images
                                             </a>
-                                            <button class="btn btn-delete inline-flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    style="width: 12px; margin-right: 5px">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                                delete
-                                            </button>
+                                            <form action="{{ route('car.destroy', $car->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-delete inline-flex items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        style="width: 12px; margin-right: 5px">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                    </svg>
+                                                    delete
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center p-large">
-                                            You Don't Have Cars Yet. <a href="{{ route('car.create') }}">Add New Car</a>
+                                            You Don't Have Cars Yet. <a href="{{ route('car.create') }}">Add New
+                                                Car</a>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -73,3 +79,14 @@
         </div>
     </main>
 </x-app-layout>
+
+<script>
+    $(document).ready(function() {
+        @if (session('success'))
+            const deletedCarId = "{{ session('deletedCarId') }}";
+            toastr.success("{{ session('success') }}");
+            console.log(deletedCarId);
+            $('#car-row-' + deletedCarId).fadeOut();
+        @endif
+    })
+</script>

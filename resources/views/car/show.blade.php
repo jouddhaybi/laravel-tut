@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="inner-car-details" bodyClass='car-details-page'>
     <main>
         {{-- @dd($car->in_wishlist); --}}
         <div class="container">
@@ -7,7 +7,7 @@
 
             <div class="car-details-content">
                 <div class="car-images-and-description col-lg-9">
-                    <div class="swiper">
+                    <div class="swiper car-details-swiper">
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <!-- Slides -->
@@ -23,8 +23,6 @@
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
 
-                        <!-- If we need scrollbar -->
-                        <div class="swiper-scrollbar"></div>
                     </div>
                     {{-- <div class="car-images-carousel">
                         <div class="car-image-wrapper">
@@ -191,14 +189,29 @@
 
 <script>
     $(document).ready(function() {
+        const images = [
+            @foreach ($car->images as $carImage)
+                '{{ asset('img/' . $carImage->image_path) }}',
+            @endforeach
+        ]; // array of thumbnails
+
         const swiper = new Swiper('.swiper', {
             // Optional parameters
             direction: 'horizontal',
             loop: true,
 
             // If we need pagination
+            // pagination: {
+            //     el: '.swiper-pagination',
+            // },
             pagination: {
                 el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function(index, className) {
+                    return `<span class="${className}">
+                  <img src="${images[index]}" />
+                </span>`;
+                },
             },
 
             // Navigation arrows

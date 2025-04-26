@@ -232,7 +232,7 @@
 <script>
     $(document).ready(function() {
         @if (session('success'))
-            toastr.success('Car Added Successfully!');
+            toastr.success("{{ session('success') }}");
         @endif
     })
 </script>

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/css/toastr.css" />
     <link rel="stylesheet" href="/swiper/swiper.min.css" />
     <link rel="stylesheet" href="/css/app.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <!-- <link rel="stylesheet" href="css/output.css" /> -->
 </head>
 

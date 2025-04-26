@@ -116,7 +116,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <input type="hidden" name="cityCar" id="car_city" value="{{ $car->city_id }}">
+                                    <input type="hidden" name="city" id="car_city" value="{{ $car->city_id }}">
                                     <select id="citiesSelect" name="city">
                                         <option value="">City</option>
                                     </select>
@@ -168,32 +168,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-images">
-                        <div class="form-image-upload">
-                            <div class="upload-placeholder">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" style="width: 48px">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </div>
-                            <input id="carFormImageUpload" name="images[]" type="file" multiple />
-                        </div>
-                        <div id="imagePreviews" class="car-form-images">
-                            @foreach ($car->images as $images)
-                                <a href="#" class="car-form-image-preview">
-                                    <svg class="image-preview-edit-delete" xmlns="http://www.w3.org/2000/svg"
-                                        width="16" height="16" fill="currentColor" class="bi bi-trash3-fill"
-                                        viewBox="0 0 16 16">
-                                        <path
-                                            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
-                                    </svg>
-                                    <img src="{{ asset('img/' . $images?->image_path) }}" alt="">
-                                </a>
-                            @endforeach
 
-                        </div>
-                    </div>
                 </div>
                 <div class="p-medium" style="width: 100%">
                     <div class="flex justify-end gap-1">
@@ -225,8 +200,24 @@
         }, 1000);
 
         @if (session('success'))
-            toastr.success('Car Edited Successfully!');
+            toastr.success("{{ session('success') }}");
         @endif
+
+        $('.image-preview-edit-delete').on('click', function() {
+            const carID = $(this).attr('data-carid');
+            const imageID = $(this).attr('data-imageid');
+
+            console.log(carID);
+            $('#car-form-image-preview-' + carID).remove();
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'deleted_images[]',
+                value: imageID
+            }).appendTo('form');
+
+        })
+
+
 
     })
 </script>

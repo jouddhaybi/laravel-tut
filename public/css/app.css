@@ -596,6 +596,9 @@ main {
 .btn-add-new-car:hover,
 .btn-add-new-car:focus {
     color: white;
+    svg {
+        color: white;
+    }
     &::after {
         transform: translateX(0);
         transition: all 200ms;

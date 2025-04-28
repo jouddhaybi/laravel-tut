@@ -1,11 +1,3 @@
-{{-- @extends('layout.app')
-
-@section('title', 'Home Page')
-
-@section('content')
-
-@endsection --}}
-
 <x-app-layout title="Home Page">
     <!-- Home Slider -->
     <section class="hero-slider">
@@ -88,16 +80,8 @@
             <div class="container">
                 <h2>Latest Added Cars</h2>
                 <div class="car-items-listing">
-                    {{-- @dd($favoriteCars->first()) --}}
-
                     @foreach ($cars as $index => $car)
-                        {{-- @dump($car->favoriteUsers) --}}
-                        {{-- @foreach ($car->favoriteUsers as $carFavoriteUser) --}}
-                        {{-- @if ($carFavoriteUser->id == auth()->user()->id) --}}
                         <x-car-item :car="$car" />
-                        {{-- <x-car-item :car="$car" :isInWatchlist="@$carFavoriteUser->id == auth()->user()->id ? true : false" /> --}}
-                        {{-- @endif --}}
-                        {{-- @endforeach --}}
                     @endforeach ()
                 </div>
             </div>
@@ -110,16 +94,7 @@
 
 <script>
     $('#formResetBtn').on('click', function() {
-        $('#makersSelect').val('')
-        $('#modelSelect').val('')
-        $('#stateSelect').val('')
-        $('#citySelect').val('')
-        $('#carTypeSelect')
-        $('#yearFrom').val('');
-        $('#yearTo').val('');
-        $('#priceFrom').val('');
-        $('#priceTo').val('');
-        $('#fuelTypes').val('')
+        $('#serachForm')[0].reset();
     })
 
     $('#makersSelect').on('change', function() {

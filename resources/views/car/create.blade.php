@@ -1,4 +1,4 @@
-<x-app-layout title="Create">
+<x-app-layout title="Create" bodyClass='create-car-page'>
     <main>
         <div class="container-small">
             <h1 class="car-details-page-title">Add new car</h1>
@@ -128,65 +128,74 @@
                         </div>
                         {{-- @dd($carFeatures); --}}
                         <div class="form-group">
+                            <h4>
+                                Car Features
+                            </h4>
+                            <div class="col selectAll">
+                                <label class="checkbox">
+                                    <input id="selectAll" type="checkbox" name="select_all" value="1" />
+                                    Select All
+                                </label>
+                            </div>
                             <div class="row">
-                                <div class="col">
-                                    <label class="checkbox">
+                                <div class="col featureBox">
+
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="air_conditioning" value="1" />
                                         Air Conditioning
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="power_windows" value="1" />
                                         Power Windows
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="power_door_locks" value="1" />
                                         Power Door Locks
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="abs" value="1" />
                                         ABS
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="cruise_control" value="1" />
                                         Cruise Control
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="bluetooth_connectivity" value="1" />
                                         Bluetooth Connectivity
                                     </label>
-                                </div>
-                                <div class="col">
-                                    <label class="checkbox">
+
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="remote_start" value="1" />
                                         Remote Start
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="gps_navigation" value="1" />
                                         GPS Navigation System
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="heated_seats" value="1" />
                                         Heated Seats
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="climate_control" value="1" />
                                         Climate Control
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="rear_parking_sensors" value="1" />
                                         Rear Parking Sensors
                                     </label>
 
-                                    <label class="checkbox">
+                                    <label class="checkbox col-lg-5">
                                         <input type="checkbox" name="leather_seats" value="1" />
                                         Leather Seats
                                     </label>
@@ -234,5 +243,14 @@
         @if (session('success'))
             toastr.success("{{ session('success') }}");
         @endif
+        // $('.selectAll').on('change', function() {
+        //     const isChecked = $(this).is(':checked');
+        //     $(this).closest('.featureBox').find('input[type="checkbox"]').not(this).prop('checked',
+        //         isChecked);
+        // });
+        $('#selectAll').change(function() {
+            var isChecked = $(this).is(':checked');
+            $('.featureBox input[type="checkbox"]').prop('checked', isChecked);
+        });
     })
 </script>

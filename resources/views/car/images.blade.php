@@ -7,7 +7,10 @@
                 </h1>
 
                 <div class="car-images-wrapper">
-                    <form action="" method="POST" class="card p-medium form-update-images">
+                    <form action="{{ route('car.images.update') }}" method="POST"
+                        class="card p-medium form-update-images">
+                        @csrf
+                        @method('PATCH')
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -22,16 +25,16 @@
                                     @foreach ($car->images as $image)
                                         <tr>
                                             <td>
-                                                <input type="checkbox" name="delete_images[]" id="delete_image_1"
-                                                    value="1" />
+                                                <input type="checkbox" name="delete_images[]"
+                                                    id="delete_image_{{ $image->id }}" value="{{ $image->id }}" />
                                             </td>
                                             <td>
                                                 <img src="{{ asset('img/' . $image->image_path) }}" alt=""
                                                     class="my-cars-img-thumbnail" style="width: 120px" />
                                             </td>
                                             <td>
-                                                <input type="number" name="positions[1]" value="1"
-                                                    style="width: 80px" />
+                                                <input type="number" name="positions[{{ $image->id }}]"
+                                                    value="{{ $image->position }}" style="width: 80px" />
                                             </td>
                                         </tr>
                                     @endforeach
@@ -47,8 +50,9 @@
                             </div>
                         </div>
                     </form>
-                    <form action="" method="POST" enctype="multipart/form-data"
-                        class="card form-images p-medium mb-large">
+                    <form action="{{ route('cars.images.upload', ['car' => $car->id]) }}" method="POST"
+                        enctype="multipart/form-data" class="card form-images p-medium mb-large">
+                        @csrf
                         <div class="form-image-upload">
                             <div class="upload-placeholder">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -72,3 +76,10 @@
         </div>
     </main>
 </x-app-layout>
+<script>
+    $(document).ready(function() {
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+    })
+</script>

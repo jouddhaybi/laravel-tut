@@ -132,30 +132,7 @@ class CarController extends Controller
                     'leather_seats' => $request->has('leather_seats'),
                 ];
                 CarFeatures::create($features);
-                if ($request->hasFile('images')) {
-                    $folderName = time() . '_' . $authUserID;
-                    $destinationPath = public_path("img/cars/{$folderName}");
-
-                    if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath, 0755, true);
-                    }
-
-                    $carImages = $request->file('images');
-                    if (!is_array($carImages)) {
-                        $carImages = [$carImages]; // wrap it into an array
-                    }
-
-                    foreach ($carImages as $image) {
-                        $fileName = time() . '_' . $image->getClientOriginalName();
-                        $image->move($destinationPath, $fileName);
-                        CarImage::create([
-                            'car_id' => $newCar->id,
-                            'image_path' => "cars/{$folderName}/{$fileName}",
-                            'position' => 1
-                        ]);
-                    }
-
-                }
+                $this->addCarImages($request, $newCar);
                 return back()->with('success', 'Car Added Successfully!');
             }
         } catch (\Throwable $th) {
@@ -165,7 +142,81 @@ class CarController extends Controller
             ], 500);
         }
     }
+    public function addCarImages(Request $request, Car $car, $newCar = null)
+    {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+        // dd($request);
+        $authUser = auth()->user();
+        $authUserID = $authUser->id;
+        $newCar = $car;
+        // dd($newCar);
+        $carLastImage = CarImage::where('car_id', $car->id)
+            ->latest('id')
+            ->first();
 
+        if ($request->hasFile('images')) {
+            $folderName = time() . '_' . $authUserID;
+            $destinationPath = public_path("img/cars/{$folderName}");
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $carImages = $request->file('images');
+            if (!is_array($carImages)) {
+                $carImages = [$carImages]; // wrap it into an array
+            }
+
+            foreach ($carImages as $index => $image) {
+
+                if (!$carLastImage) {
+                    $index = $index + 1;
+                } else {
+                    $index = $carLastImage->position + $index + 1;
+                }
+                $fileName = time() . '_' . $image->getClientOriginalName();
+                $image->move($destinationPath, $fileName);
+
+                CarImage::create([
+                    'car_id' => $newCar->id,
+                    'image_path' => "cars/{$folderName}/{$fileName}",
+                    'position' => $index,
+                ]);
+            }
+        }
+        return back()->with('success', 'image Added Successfully!');
+    }
+    public function updateImages(Request $request)
+    {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
+
+        $deleteImages = $request->input('delete_images');
+        if ($deleteImages) {
+            foreach ($deleteImages as $deleteImage) {
+                $carImage = CarImage::find($deleteImage);
+                if ($carImage) {
+                    $filePath = public_path('img/' . $carImage->image_path);
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                    $carImage->delete();
+                }
+            }
+        }
+
+        $positions = $request->input('positions');
+        if ($positions) {
+            foreach ($positions as $id => $position) {
+                CarImage::where('id', $id)->update(['position' => $position]);
+            }
+        }
+
+        return back()->with('success', 'images Updated Successfully!');
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -292,21 +343,63 @@ class CarController extends Controller
     }
     public function images(Car $car)
     {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
         return view('car.images', ['car' => $car]);
     }
 
-    public function search()
+    public function search(Request $request)
     {
         $query = Car::where('published_at', '<', now())
             ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
             ->orderBy('published_at', 'desc');
 
-        // $query->join('cities', 'cities.id', '=', 'cars.city_id')
-        //     ->where('cities.state_id', 1);
+        // Apply filters only if values exist
+        if ($request->filled('maker_id')) {
+            $query->where('maker_id', $request->maker_id);
+        }
 
-        // $carCount = $query->count();
-        // $cars = $query->limit(30)->get();
+        if ($request->filled('model_id')) {
+            $query->where('model_id', $request->model_id);
+        }
+
+        if ($request->filled('state_id')) {
+            $query->whereHas('city', function ($q) use ($request) {
+                $q->where('state_id', $request->state_id);
+            });
+        }
+
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        if ($request->filled('car_type_id')) {
+            $query->where('car_type_id', $request->car_type_id);
+        }
+
+        if ($request->filled('year_from')) {
+            $query->where('year', '>=', $request->year_from);
+        }
+
+        if ($request->filled('year_to')) {
+            $query->where('year', '<=', $request->year_to);
+        }
+
+        if ($request->filled('price_from')) {
+            $query->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to')) {
+            $query->where('price', '<=', $request->price_to);
+        }
+
+        if ($request->filled('fuel_type_id')) {
+            $query->where('fuel_type_id', $request->fuel_type_id);
+        }
+
         $cars = $query->paginate(15);
+
         return view('car.search', ['cars' => $cars]);
     }
 

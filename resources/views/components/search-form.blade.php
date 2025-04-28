@@ -1,7 +1,7 @@
 @props(['makers', 'carTypes', 'fuelTypes', 'states']);
 <section class="find-a-car">
     <div class="container">
-        <form action="{{ route('car.search') }}" method="GET" class="find-a-car-form card flex p-medium">
+        <form id="serachForm" action="{{ route('car.search') }}" method="GET" class="find-a-car-form card flex p-medium">
             <div class="find-a-car-inputs">
                 <div>
                     <select id="makersSelect" name="maker_id">

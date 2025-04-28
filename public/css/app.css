@@ -604,7 +604,11 @@ main {
         transition: all 200ms;
     }
 }
-
+.btn-signup {
+    svg {
+        color: white;
+    }
+}
 .btn-signup,
 .btn-login {
     display: inline-flex;

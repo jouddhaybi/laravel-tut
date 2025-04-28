@@ -1,3 +1,8 @@
+.checkbox,
+.inline-radio {
+  column-gap: 0.3rem;
+}
+
 .car-details-page .car-images-and-description .car-details-swiper .swiper-wrapper .swiper-slide img {
   width: 100%;
 }
@@ -20,4 +25,36 @@
 
 .page-my-cars .table-responsive table tr .action-cell {
   display: flex;
+}
+
+.car-images .form-images button {
+  width: 100%;
+}
+
+.create-car-page .selectAll {
+  padding: 0;
+}
+
+.create-car-page .edit-btn-reset a,
+.edit-car-page .edit-btn-reset a {
+  text-decoration: none;
+  color: #e9580c;
+}
+.create-car-page .edit-btn-reset a:hover,
+.edit-car-page .edit-btn-reset a:hover {
+  color: #e9580c;
+}
+.create-car-page .selectAll,
+.edit-car-page .selectAll {
+  padding: 0;
+}
+.create-car-page .featureBox,
+.edit-car-page .featureBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.create-car-page .featureBox .checkbox,
+.edit-car-page .featureBox .checkbox {
+  column-gap: 0.5rem;
 }

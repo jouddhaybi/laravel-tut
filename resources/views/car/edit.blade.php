@@ -1,4 +1,4 @@
-<x-app-layout title="Car Edit">
+<x-app-layout title="Car Edit" bodyClass="edit-car-page">
     <main>
         <div class="container-small">
             <h1 class="car-details-page-title">Add new car</h1>
@@ -138,20 +138,27 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <h4>
+                                Car Features
+                            </h4>
+                            <div class="col selectAll">
+                                <label class="checkbox">
+                                    <input id="selectAll" type="checkbox" name="select_all" value="1" />
+                                    Select All
+                                </label>
+                            </div>
                             <div class="row">
-
-                                @foreach ($carFeatures->getAttributes() as $column => $value)
-                                    @if ($column !== 'car_id')
-                                        <div class="col col-lg-6">
-                                            <label class="checkbox">
+                                <div class="col featureBox">
+                                    @foreach ($carFeatures->getAttributes() as $column => $value)
+                                        @if ($column !== 'car_id')
+                                            <label class="checkbox col-lg-5">
                                                 <input type="checkbox" name="{{ $column }}"
                                                     value="{{ $value }}" {{ $value == 1 ? 'checked' : '' }} />
                                                 {{ $column }}
                                             </label>
-                                        </div>
-                                    @endif
-                                @endforeach
-
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -172,7 +179,11 @@
                 </div>
                 <div class="p-medium" style="width: 100%">
                     <div class="flex justify-end gap-1">
-                        <button type="button" class="btn btn-default">Reset</button>
+
+                        <button type="button" class="edit-btn-reset  btn btn-default">
+                            <a href="{{ url()->current() }}">Reset</a>
+                        </button>
+
                         <button class="btn btn-primary">Edit</button>
                     </div>
                 </div>
@@ -216,7 +227,10 @@
             }).appendTo('form');
 
         })
-
+        $('#selectAll').change(function() {
+            var isChecked = $(this).is(':checked');
+            $('.featureBox input[type="checkbox"]').prop('checked', isChecked);
+        });
 
 
     })

@@ -12,9 +12,9 @@ Route::get("/", [HomeController::class, 'index'])->name('home');
 Route::post('car/get-models', [CarController::class, 'getModelsByMakersId'])->name('car.models');
 Route::post('car/get-cities', [CarController::class, 'getCitiesByStatesId'])->name('car.cities');
 Route::post('car/create', [CarController::class, 'createCar'])->name('car.newcreate');
-// Route::patch('car/update', [CarController::class, 'update'])->name('car.updatecar');
+Route::post('/car/{car}/images/upload', [CarController::class, 'addCarImages'])->name('cars.images.upload');
 Route::post('car/add-watchlist', [CarController::class, 'addToWatchList'])->name('car.addwatchlist');
-
+Route::patch('car/update-images', [CarController::class, 'updateImages'])->name('car.images.update');
 
 Route::get('car/search', [CarController::class, 'search'])->name('car.search');
 Route::get('car/{car}/images', [CarController::class, 'images'])->name('car.images');

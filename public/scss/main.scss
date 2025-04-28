@@ -1,5 +1,11 @@
 $primary-color: #e9580c;
 
+
+.checkbox,
+.inline-radio {
+    column-gap: .3rem;
+}
+
 .car-details-page {
     .car-images-and-description {
         .car-details-swiper {
@@ -47,6 +53,50 @@ $primary-color: #e9580c;
 
                 }
             }
+        }
+    }
+}
+
+.car-images {
+    .form-images {
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.create-car-page {
+    .selectAll {
+        padding: 0;
+    }
+}
+
+.create-car-page,
+.edit-car-page {
+    .edit-btn-reset {
+        a {
+            text-decoration: none;
+            color: $primary-color;
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+
+    .selectAll {
+        padding: 0;
+
+
+    }
+
+    .featureBox {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .checkbox {
+            column-gap: .5rem;
         }
     }
 }

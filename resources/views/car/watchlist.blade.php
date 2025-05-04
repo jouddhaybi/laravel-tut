@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Favorite Cars">
     <main>
         <!-- New Cars -->
         <section>

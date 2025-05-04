@@ -351,6 +351,9 @@ class CarController extends Controller
 
     public function search(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect($this->redirectTo);
+        }
         $query = Car::where('published_at', '<', now())
             ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
             ->orderBy('published_at', 'desc');
@@ -400,7 +403,17 @@ class CarController extends Controller
 
         $cars = $query->paginate(15);
 
-        return view('car.search', ['cars' => $cars]);
+        $makers = Maker::get();
+        $carTypes = CarType::get();
+        $fuelTypes = FuelType::get();
+        $states = State::get();
+        return view('car.search', [
+            'cars' => $cars,
+            'makers' => $makers,
+            'carTypes' => $carTypes,
+            'fuelTypes' => $fuelTypes,
+            'states' => $states
+        ]);
     }
 
     public function watchlist()

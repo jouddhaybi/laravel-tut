@@ -17,11 +17,7 @@
 <script>
     $(document).ready(function() {
         // alert('global');
-
-
-
         $('.btn-heart').on('click', function() {
-
                 @guest
                 toastr.error("Please Login. Or Create An Account if You Don't Have One.")
             @endguest
@@ -76,7 +72,7 @@
                 let html = "";
                 for (let i = 0; i < response.models.length; i++) {
                     html += `<option value=${response.models[i].id}>
-    ${response.models[i].name}</option>`;
+        ${response.models[i].name}</option>`;
                 }
                 $('#modelSelect').append(html);
             },
@@ -88,28 +84,30 @@
 
 
     $('#stateSelect').on('change', function() {
-    const stateId = this.value;
-    $('#citiesSelect').html('<option value=>City</option>')
-    $.ajax({
-        url: "{{ route('car.cities') }}",
-        type: 'POST',
-        data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            value: stateId
-        },
-        success: function(response) {
-            let html = "";
-            for (let i = 0; i < response.cities.length; i++) {
-                html += `<option value=${response.cities[i].id}>
-                            ${response.cities[i].name}</option>`;
+        const stateId = this.value;
+        $('#citiesSelect').html('<option value=>City</option>')
+        $.ajax({
+            url: "{{ route('car.cities') }}",
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                value: stateId
+            },
+            success: function(response) {
+                let html = "";
+                for (let i = 0; i < response.cities.length; i++) {
+                    html += `<option value=${response.cities[i].id}>
+                                ${response.cities[i].name}</option>`;
+                }
+                $('#citiesSelect').append(html);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
             }
-            $('#citiesSelect').append(html);
-        },
-        error: function(xhr, status, error) {
-            console.log('Error:', error);
-        }
-    });
+        });
     })
-
+    $('#formResetBtn').on('click', function() {
+    $('#serachForm')[0].reset();
+    })
     })
 </script>

@@ -1,10 +1,11 @@
 @props(['makers', 'carTypes', 'fuelTypes', 'states']);
+
 <section class="find-a-car">
     <div class="container">
         <form id="serachForm" action="{{ route('car.search') }}" method="GET" class="find-a-car-form card flex p-medium">
             <div class="find-a-car-inputs">
                 <div>
-                    <select id="makersSelect" name="maker_id">
+                    <select id="makerSelect" name="maker_id">
                         <option value="">Maker</option>
                         @foreach ($makers as $maker)
                             <option value="{{ $maker->id }}">{{ $maker->name }}</option>
@@ -25,7 +26,7 @@
                     </select>
                 </div>
                 <div>
-                    <select id="citySelect" name="city_id">
+                    <select id="citiesSelect" name="city_id">
                         <option value="" style="display: block">City</option>
                     </select>
                 </div>
@@ -38,10 +39,30 @@
                     </select>
                 </div>
                 <div>
-                    <input id="yearFrom" type="number" placeholder="Year From" name="year_from" />
+                    <select name="year_from">
+                        <option value="">Year From</option>
+                        @php
+                            $currentYear = date('Y');
+                        @endphp
+                        @for ($year = $currentYear; $year >= 1900; $year--)
+                            <option value="{{ $year }}">
+                                {{ $year }}</option>
+                        @endfor
+                    </select>
+                    {{-- <input id="yearFrom" type="number" placeholder="Year From" name="year_from" /> --}}
                 </div>
                 <div>
-                    <input id="yearTo" type="number" placeholder="Year To" name="year_to" />
+                    <select name="year_to">
+                        <option value="">Year To</option>
+                        @php
+                            $currentYear = date('Y');
+                        @endphp
+                        @for ($year = $currentYear; $year >= 1900; $year--)
+                            <option value="{{ $year }}">
+                                {{ $year }}</option>
+                        @endfor
+                    </select>
+                    {{-- <input id="yearTo" type="number" placeholder="Year To" name="year_to" /> --}}
                 </div>
                 <div>
                     <input id="priceFrom" type="number" placeholder="Price From" name="price_from" />

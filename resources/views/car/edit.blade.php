@@ -41,7 +41,7 @@
                                         @php
                                             $currentYear = date('Y');
                                         @endphp
-                                        @for ($year = $currentYear; $year >= 1000; $year--)
+                                        @for ($year = $currentYear; $year >= 1900; $year--)
                                             <option value="{{ $year }}"
                                                 {{ $year == $car->year ? 'selected' : '' }}>
                                                 {{ $year }}</option>

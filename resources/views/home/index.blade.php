@@ -68,10 +68,11 @@
     </section>
     <!--/ Home Slider -->
 
-
+    <div id="app"></div>
 
     <main>
         <!-- Find a car form -->
+
         <x-search-form :makers="$makers" :carTypes="$carTypes" :fuelTypes="$fuelTypes" :states="$states" />
         <!--/ Find a car form -->
 

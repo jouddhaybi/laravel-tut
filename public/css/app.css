@@ -443,6 +443,9 @@ body.page-signup {
 
 .navbar-menu {
     position: relative;
+    /* display: flex;
+    align-items: center;
+    justify-content: flex-end; */
 }
 
 .navbar-menu .navbar-menu-handler {
@@ -494,6 +497,12 @@ body.page-signup {
 .navbar-menu .submenu > li > a:hover,
 .navbar-menu .submenu > li button:hover {
     background-color: rgba(0, 0, 0, 0.05);
+}
+.favorite-cars {
+    svg {
+        /* width: 2rem; */
+        /* height: 2rem; */
+    }
 }
 
 .btn-navbar-toggle {

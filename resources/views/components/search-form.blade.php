@@ -1,5 +1,4 @@
-@props(['makers', 'carTypes', 'fuelTypes', 'states']);
-
+@props(['makers', 'carTypes', 'fuelTypes', 'states'])
 <section class="find-a-car">
     <div class="container">
         <form id="serachForm" action="{{ route('car.search') }}" method="GET" class="find-a-car-form card flex p-medium">

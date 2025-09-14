@@ -241,6 +241,9 @@
 <script>
     $(document).ready(function() {
         @if (session('success'))
+            toastr.options = {
+                "positionClass": "toast-top-center"
+            };
             toastr.success("{{ session('success') }}");
         @endif
         // $('.selectAll').on('change', function() {

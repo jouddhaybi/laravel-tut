@@ -211,6 +211,9 @@
         }, 1000);
 
         @if (session('success'))
+            toastr.options = {
+                "positionClass": "toast-top-center"
+            };
             toastr.success("{{ session('success') }}");
         @endif
 

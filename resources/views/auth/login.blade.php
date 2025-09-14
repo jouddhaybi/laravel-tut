@@ -30,6 +30,9 @@
 
 <script>
     @if ($errors->has('error'))
+        toastr.options = {
+            "positionClass": "toast-top-center"
+        };
         toastr.error('Invalid Credentials. Please Try Again.');
     @endif
 </script>

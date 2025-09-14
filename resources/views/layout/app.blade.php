@@ -19,6 +19,9 @@
         // alert('global');
         $('.btn-heart').on('click', function() {
                 @guest
+                toastr.options = {
+                    "positionClass": "toast-top-center"
+                };
                 toastr.error("Please Login. Or Create An Account if You Don't Have One.")
             @endguest
 
@@ -36,6 +39,9 @@
 
                     if (response.status == 201) {
                         //add car
+                        toastr.options = {
+                            "positionClass": "toast-top-center"
+                        };
                         toastr.success(response.message);
                         $('#emptyHeart' + carID).addClass('hidden');
                         $('#filledHeart' + carID).removeClass('hidden');
@@ -44,6 +50,9 @@
 
                     if (response.status == 200) {
                         //delete car
+                        toastr.options = {
+                            "positionClass": "toast-top-center"
+                        };
                         toastr.success(response.message)
                         $('#filledHeart' + carID).addClass('hidden');
                         $('#emptyHeart' + carID).removeClass('hidden');

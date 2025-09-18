@@ -46,6 +46,28 @@ class CarController extends Controller
         return view('car.index', ['cars' => $cars]);
     }
 
+    public function publishCar(Request $request)
+    {
+        $carId = $request->input('value');
+        $car = Car::findOrFail($carId);
+        if (is_null($car->published_at)) {
+            $car->published_at = now();
+            $car->save();
+
+            return response()->json([
+                'message' => 'Car published successfully!',
+                'status' => 201
+            ]);
+        }
+        $car->published_at = null;
+        $car->save();
+        return response()->json([
+            'message' => 'Car unpublished successfully!',
+            'status' => 200
+        ]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -438,9 +460,7 @@ class CarController extends Controller
         $authUserID = $authUser->id;
 
         $carId = $request->input('value');
-
         // dd($carId);
-
         $favoriteCar = favouriteCars::where('user_id', $authUserID)->where('car_id', $carId);
 
         if ($favoriteCar->exists()) {

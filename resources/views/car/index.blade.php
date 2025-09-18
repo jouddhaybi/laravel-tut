@@ -24,7 +24,14 @@
                                         </td>
                                         <td>{{ $car->year }} - {{ $car->maker->name }} {{ $car->model->name }}</td>
                                         <td>{{ $car->getCreateDate() }}</td>
-                                        <td>{{ $car->published_at ? 'Yes' : 'No' }}</td>
+                                        <td>
+                                            {{ $car->published_at ? 'Yes' : 'No' }}
+                                            <label class="switch">
+                                                <input class="publishCheck" data-id='{{ $car->id }}'
+                                                    type="checkbox" {{ $car->published_at ? 'checked' : '' }}>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </td>
                                         <td class="action-cell">
                                             <a href="{{ route('car.edit', $car->id) }}"
                                                 class="btn btn-edit inline-flex items-center">
@@ -88,5 +95,42 @@
             console.log(deletedCarId);
             $('#car-row-' + deletedCarId).fadeOut();
         @endif
+
+        $(".publishCheck").on("click", function() {
+            var carID = $(this).data('id');
+            console.log(carID);
+            $.ajax({
+                url: "{{ route('car.publishCar') }}",
+                type: 'PATCH',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    value: carID
+                },
+                success: function(response) {
+
+                    if (response.status == 201) {
+                        //add car
+                        toastr.options = {
+                            "positionClass": "toast-top-center"
+                        };
+                        toastr.success(response.message);
+
+                    }
+
+                    if (response.status == 200) {
+                        //delete car
+                        toastr.options = {
+                            "positionClass": "toast-top-center"
+                        };
+                        toastr.success(response.message)
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
     })
 </script>

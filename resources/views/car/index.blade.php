@@ -25,7 +25,6 @@
                                         <td>{{ $car->year }} - {{ $car->maker->name }} {{ $car->model->name }}</td>
                                         <td>{{ $car->getCreateDate() }}</td>
                                         <td>
-                                            {{ $car->published_at ? 'Yes' : 'No' }}
                                             <label class="switch">
                                                 <input class="publishCheck" data-id='{{ $car->id }}'
                                                     type="checkbox" {{ $car->published_at ? 'checked' : '' }}>

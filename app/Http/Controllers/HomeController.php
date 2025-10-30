@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\CarType;
-use App\Models\favouriteCars;
 use App\Models\FuelType;
 use App\Models\Maker;
 use App\Models\State;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

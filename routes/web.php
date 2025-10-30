@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Admin\HomeController as AdHomeController;
 
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\HomeController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\SignupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [HomeController::class, 'index'])->name('home');
+Route::get("/admin", [AdHomeController::class, 'index'])->name('adminPortal');
 
 
 Route::post('car/get-models', [CarController::class, 'getModelsByMakersId'])->name('car.models');
